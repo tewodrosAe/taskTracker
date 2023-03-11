@@ -337,3 +337,9 @@ form.auth {
     margin-top: 0.5rem;
     background-color: var(--chill);
 }
+.error{
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 0.8rem;
+    margin-left: 1.5rem;
+}

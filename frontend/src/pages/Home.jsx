@@ -11,6 +11,7 @@ export default function Home () {
     const [taskType,setTaskType] = useState('')
     const [urgency,setUrgency] = useState('')
     const [plusClicked,setPlusClicked] = useState(false)
+    const [error,setError] = useState(null)    
     const {tasks,dispatch} = useTaskContext()
     let number
 
@@ -25,16 +26,37 @@ export default function Home () {
         setter()
     },[dispatch])
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async(e) => {
         e.preventDefault()
-        console.log(
-            "task =" , task
-            ,"day =" , day,
-            "time=",time,
-            "description=",description,
-            "task type =",taskType,
-            "urgency =",urgency 
-        )
+        if(task == '' || day == '' || time == '' || description == '' || taskType == '' || urgency == ''){
+            return setError('Please fill all fields and click the urgency level')
+        }
+        else{
+            setError(null)
+        }
+        const taskCol = {title:task,day,time,description,type:taskType,urgency}
+
+        const resp = await fetch('http://localhost:5000/api/v1/task',{
+            method: 'POST',
+            body: JSON.stringify(taskCol),
+            headers: {
+                'Content-Type':'application/json'
+            }
+        })
+        
+        const respJson = await resp.json()
+
+        if(resp.ok){
+            setDay('')
+            setDescription('')
+            setTask('')
+            setTaskType('')
+            setTime('')
+            setUrgency('')
+            dispatch({type:'CREATE_TASK',payload:respJson})
+            handlePlus()
+        }
+        
     }
     const handleColorClick = (e) => {
         const colorChosen = e.target.className.split(" ")[0]
@@ -97,6 +119,7 @@ export default function Home () {
                     <div className={urgency == 'green' ? 'green color-pallet color-chosen':'green color-pallet'}  onClick={handleColorClick}>fine</div>
                     <div className={urgency == 'blue' ? 'blue color-pallet color-chosen':'blue color-pallet'}  onClick={handleColorClick}>chill</div>
                 </div>
+                {error && <div className="error">{error}</div>}
                 <button>Create task</button>
             </form>
         </div>

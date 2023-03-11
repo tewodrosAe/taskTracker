@@ -5,9 +5,9 @@ export const TaskContext = createContext()
 export const taskDispatcher = (state,action) =>{
     switch(action.type){
         case "CREATE_TASK":
-            return {tasks: [action.payload,...state.task]}
+            return {tasks: [action.payload,...state.tasks]}
         case "DELETE_TASK":
-            return {tasks : state.task.filter(t => t._id !== action.payload.task._id)}
+            return {tasks : state.tasks.filter(t => t._id !== action.payload._id)}
         case "SET_TASK":
             return {tasks : action.payload}
         default:

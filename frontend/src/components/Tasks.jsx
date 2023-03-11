@@ -1,6 +1,16 @@
+import { useTaskContext } from "../hooks/useTaskContext"
 
 
 export default function Tasks({task}) {
+    const {dispatch} = useTaskContext()
+    const handleDelete = async() => {
+        const resp = await fetch(`http://localhost:5000/api/v1/task/${task._id}`,{
+            method:'DELETE',
+        }) 
+        if(resp.ok){
+            dispatch({type:'DELETE_TASK',payload:task})
+        }
+    }
     return(
         <div className="task">
             <div className="task-wrapper">
@@ -26,8 +36,7 @@ export default function Tasks({task}) {
                 </div>
             </div>
             <div className="buttons">
-                <button type="button" className="delete">Delete</button>
-                <button type="button" className="update">Change</button>
+                <button type="button" className="delete" onClick={handleDelete}>Delete</button>
             </div>
         </div>
     )
