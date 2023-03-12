@@ -4,8 +4,9 @@ import mongoose from 'mongoose'
 // post task 
 const createTask = async(req,res) => {
     const {title,day,time,description,urgency,type} = req.body
+    const {_id} = req.user 
     try{
-        const task = await Task.create({title,day,time,description,urgency,type})
+        const task = await Task.create({title,day,time,description,urgency,type,user_id:_id})
         res.status(200).json(task)
     }catch(error){
         res.status(400).json({error})
@@ -14,7 +15,8 @@ const createTask = async(req,res) => {
 
 // get task
 const getTask = async (req,res) => {
-     const task = await Task.find().sort({createdAt:-1})
+     const user_id = req.user._id
+     const task = await Task.find({user_id}).sort({createdAt:-1})
      res.status(200).json(task)
     }
 

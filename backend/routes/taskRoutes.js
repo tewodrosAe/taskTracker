@@ -1,8 +1,10 @@
 import express from 'express'
 import { createTask, getTask, deleteTask, updateTask} from '../controllers/taskControllers.js'
+import requireUser from '../middleware/requireUser.js'
 
 const route = express.Router()
 
+route.use(requireUser)
 // post tasks to server
 route.post('/', createTask)
 

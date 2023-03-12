@@ -1,13 +1,16 @@
 import {useState} from 'react'
+import { useSignup } from '../hooks/useSIgnup'
 
 const Signup = ()  => {
     const [email,setEmail] = useState('')
     const [name,setName] = useState('')
     const [password,setPassword] =  useState('')
-    const handleSubmit = (e) =>{
+    const {error,isLoading,signup} = useSignup()
+    const handleSubmit = async (e) =>{
         e.preventDefault()
-        console.log(email,password)
+        await signup(name,email,password)
     }
+   
     return (
         <form onSubmit={handleSubmit} className='auth'>
             <h3>Signup</h3>
@@ -15,7 +18,7 @@ const Signup = ()  => {
             <input
             type='text'
             onChange={(e) => setName(e.target.value)}
-            value={email}
+            value={name}
             />
             <label>Email:</label>
             <input

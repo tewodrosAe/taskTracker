@@ -1,10 +1,12 @@
 import {useState} from 'react'
-
+import {useLogin} from '../hooks/useLogin'
 const Login = ()  => {
     const [email,setEmail] = useState('')
     const [password,setPassword] =  useState('')
-    const handleSubmit = () =>{
-        console.log(email,password)
+    const {error,isLoading,login} = useLogin()
+    const handleSubmit = async (e) =>{
+        e.preventDefault()
+        await login(email,password)
     }
     return (
         <form onSubmit={handleSubmit} className='auth'>

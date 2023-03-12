@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import reactLogo from './assets/react.svg'
-import {BrowserRouter, Route, Routes} from 'react-router-dom'
+import {BrowserRouter, Navigate, Route, Routes} from 'react-router-dom'
 import Home from './pages/Home'
 import Nav from './components/Nav'
 import Signup from './pages/Signup'
 import Login from './pages/Login'
-
+import useUserContext from './hooks/useUserContext'
 
 function App() {
-  
+  const {user} = useUserContext()
   return (
     <div className="app">
       <BrowserRouter>
@@ -17,15 +17,15 @@ function App() {
           <Routes>
             <Route 
             path='/'
-            element={<Home/>}
+            element={user ? <Home/> : <Navigate to='login'/>}
             />
             <Route
             path='/signup'
-            element={<Signup/>}
+            element={!user ? <Signup/> : <Navigate to='/'/>}
             />
             <Route
             path='/login'
-            element={<Login/>}
+            element={!user ? <Login/> : <Navigate to='/'/>}
             />
         </Routes>
         </div>

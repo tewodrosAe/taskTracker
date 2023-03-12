@@ -38,6 +38,29 @@ userSchema.statics.signup = async function (username,email,password) {
     const user = await this.create({username,email,password:hash})
 
     return user
-
 }
+
+userSchema.statics.login = async function (email,password){
+    if(!email || !password){
+        throw Error("Fields must not be empty")
+    }
+    if(!validator.isEmail(email)){
+        throw Error("Not a valid email address")
+    }
+    
+    const user = await this.findOne({email})
+
+    if(!user){
+        throw Error("User doesnt exist")
+    }
+
+    const valid = await bcrypt.compare(password,user.password)
+
+    if(!valid){
+        throw Error("Incorrect Password or Email")
+    }
+
+    return user
+}
+
 export default mongoose.model('userass',userSchema)

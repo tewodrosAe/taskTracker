@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import Tasks from "../components/Tasks"
 import {AiFillPlusCircle} from 'react-icons/ai'
 import { useTaskContext } from "../hooks/useTaskContext"
+import useUserContext from "../hooks/useUserContext"
 
 export default function Home () {
     const [task,setTask] = useState('')
@@ -13,14 +14,18 @@ export default function Home () {
     const [plusClicked,setPlusClicked] = useState(false)
     const [error,setError] = useState(null)    
     const {tasks,dispatch} = useTaskContext()
+    const { user } = useUserContext()
     let number
 
     useEffect(() => {
         const setter = async () =>{
-            const taskCol = await fetch('http://localhost:5000/api/v1/task')
+            const taskCol = await fetch('http://localhost:5000/api/v1/task',{
+                headers:{
+                    "Authorization": `Bearer ${user.token}`
+            }})
             const json = await taskCol.json()
-            dispatch({type:'SET_TASK',payload:json})
-            if(taskCol.ok){
+            if(taskCol.ok){   
+                dispatch({type:'SET_TASK',payload:json})
             }
         }
         setter()
@@ -40,7 +45,8 @@ export default function Home () {
             method: 'POST',
             body: JSON.stringify(taskCol),
             headers: {
-                'Content-Type':'application/json'
+                'Content-Type':'application/json',
+                "Authorization": `Bearer ${user.token}`
             }
         })
         
@@ -70,7 +76,7 @@ export default function Home () {
         <div className={plusClicked ? "home-wrapper scroll-stop" : "home-wrapper"}>
         <div className="home">
             <div className="details">
-                <span>Welcome back, Tedy</span>
+                <span>Welcome back, {user && user.username}</span>
                 <p>You've got <b>7</b> tasks coming up.</p>
             </div>
             <div className="tasks">
