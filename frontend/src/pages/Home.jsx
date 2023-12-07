@@ -77,7 +77,7 @@ export default function Home () {
         <div className="home">
             <div className="details">
                 <span>Welcome back, {user && user.username}</span>
-                <p>You've got <b>7</b> tasks coming up.</p>
+                <p>You've got <b>{tasks && tasks.length}</b> tasks coming up.</p>
             </div>
             <div className="tasks">
                 {tasks && tasks.map(t => <Tasks key={t._id} task={t}/>)}

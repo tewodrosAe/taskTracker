@@ -25,6 +25,7 @@ const Login = ()  => {
             required={true}
             />
             <button>Log in</button>
+            {error && <div>{error}</div>}
         </form>
     )
 }
